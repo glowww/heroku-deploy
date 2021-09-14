@@ -73,6 +73,8 @@ const deploy = ({
   appdir,
 }) => {
   const force = !dontuseforce ? "--force" : "";
+    console.log("1");
+    console.log(force);
   if (usedocker) {
     execSync(
       `heroku container:push ${dockerHerokuProcessType} --app ${app_name} ${dockerBuildArgs}`,
@@ -90,14 +92,18 @@ const deploy = ({
       .trim();
 
     if (remote_branch === "master") {
+        console.log("x: master");
       execSync("heroku plugins:install heroku-repo");
       execSync("heroku repo:reset -a " + app_name);
+        console.log("y: master");
     }
 
     if (appdir === "") {
+        console.log("before push");
       execSync(`git push heroku ${branch}:refs/heads/main ${force}`, {
         maxBuffer: 104857600,
       });
+        console.log("after push");
     } else {
       execSync(
         `git push ${force} heroku \`git subtree split --prefix=${appdir} ${branch}\`:refs/heads/main`,
